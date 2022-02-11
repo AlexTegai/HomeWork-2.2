@@ -8,31 +8,68 @@
 import UIKit
 
 class ViewController: UIViewController {
-    @IBOutlet var colorScreen: UIView!
     
-    @IBOutlet var redValue: UILabel!
-    @IBOutlet var greenValue: UILabel!
-    @IBOutlet var blueValue: UILabel!
+    @IBOutlet weak var colorView: UIView!
+
+    @IBOutlet weak var redLabel: UILabel!
+    @IBOutlet weak var greenLabel: UILabel!
+    @IBOutlet weak var blueLabel: UILabel!
     
-    @IBOutlet var redSlider: UISlider!
-    @IBOutlet var greenSlider: UISlider!
-    @IBOutlet var blueSlider: UISlider!
+    @IBOutlet weak var redSlider: UISlider!
+    @IBOutlet weak var greenSlider: UISlider!
+    @IBOutlet weak var blueSlider: UISlider!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        colorScreen.layer.cornerRadius = 10
-    }
-
-    @IBAction func redSliderAction() {
-        redValue.text = String(format: "%.1f", redSlider.value)
-        greenValue.text = String(format: "%.1f", greenSlider.value)
-        blueValue.text = String(format: "%.1f", blueSlider.value)
         
-        let redColor = CGFloat(redSlider.value)
-        let greenColor  = CGFloat(greenSlider.value)
-        let blueColor = CGFloat(blueSlider.value)
-
-        colorScreen.backgroundColor = UIColor(red: redColor, green: greenColor, blue: blueColor, alpha: 1)
+        colorView.layer.cornerRadius = 15
+        
+        redSlider.minimumTrackTintColor = .red
+        greenSlider.minimumTrackTintColor = .green
+        
+        setColor()
+        setValue(for: redLabel, greenLabel, blueLabel)
+    }
+    
+    // Изменение цветов слайдерами
+    @IBAction func rgbSlider(_ sender: UISlider) {
+        setColor()
+                
+        switch sender {
+        case redSlider: setValue(for: redLabel)
+        case greenSlider: setValue(for: greenLabel)
+        default: setValue(for: blueLabel)
+        }
+    }
+    
+    // Цвет вью
+    private func setColor() {
+        colorView.backgroundColor = UIColor(
+            red: CGFloat(redSlider.value),
+            green: CGFloat(greenSlider.value),
+            blue: CGFloat(blueSlider.value),
+            alpha: 1
+        )
+    }
+    
+    private func setValue(for labels: UILabel...) {
+        labels.forEach { label in
+            switch label {
+            case redLabel:
+                label.text = string(from: redSlider)
+            case greenLabel:
+                label.text = string(from: greenSlider)
+            default:
+                label.text = string(from: blueSlider)
+            }
+        }
+    }
+    
+    // Значения RGB
+    private func string(from slider: UISlider) -> String {
+        String(format: "%.1f", slider.value)
     }
 }
+
+
 
